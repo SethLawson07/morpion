@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" 
+stylesheets="@../styles/styles.css"
+fx:controller="lawson.lonchi.morpion.controller.TicTacToeController">
+    <center>
+        <GridPane fx:id="gridPane" hgap="0" vgap="0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints vgrow="ALWAYS" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+    <bottom>
+        <VBox alignment="CENTER" spacing="10">
+        <VBox alignment="CENTER" spacing="10">
+            <Button text="Restart" onAction="#handleRestart" fx:id="restartButton"/>
+        </VBox>
+            <Label fx:id="endOfGameMessage" />
+            <HBox spacing="10" alignment="CENTER">
+                <Label fx:id="xScoreLabel" text="0 case pour X"/>
+                <Label fx:id="oScoreLabel" text="0 case pour O" />
+                <Label fx:id="freeSquaresLabel" text="9 cases libres" />
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>
