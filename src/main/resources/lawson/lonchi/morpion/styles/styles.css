@@ -35,7 +35,7 @@
 /* Style pour les cases */
 .tictactoe-square {
     -fx-font-size: 25px; /* Taille de police augmentée */
-    -fx-font-weight: bold; 
+    /* -fx-font-weight: bold;  */
     /* Texte en gras */
     -fx-text-fill: black; /* Couleur du texte en noir */
     -fx-alignment: center; /* Centrer le texte */
@@ -65,7 +65,7 @@
         -fx-border-width: 0.5px;    /* Épaisseur de la bordure */
         -fx-background-color: white; /* Fond blanc */
         -fx-font-size: 25px;      /* Texte plus grand */
-        -fx-font-weight: bold; 
+        /* -fx-font-weight: bold;  */
         -fx-text-fill: black;
         -fx-alignment: center;
         -fx-min-width: 100px; /* Ajuste selon la taille souhaitée */

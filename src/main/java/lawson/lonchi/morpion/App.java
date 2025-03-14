@@ -15,13 +15,6 @@ public class App extends Application {
 
     private static Scene scene;
 
-    // @Override
-    // public void start(Stage stage) throws IOException {
-    //     scene = new Scene(loadFXML("primary"), 640, 480);
-    //     stage.setScene(scene);
-    //     stage.show();
-    // }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/lawson/lonchi/morpion/view/TicTacToeView.fxml"));
