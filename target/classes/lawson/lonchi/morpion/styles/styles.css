@@ -49,9 +49,8 @@
 .tictactoe-square:disabled {
     -fx-background-color: red; /* Fond rouge après un clic */
 
+}
 
-
-    }
 
     #gridPane {
         -fx-padding: 0;
@@ -95,4 +94,4 @@
     -fx-background-color: red;
     -fx-text-fill: white;
 }
-    
+   

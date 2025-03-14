@@ -1,24 +1,56 @@
 package lawson.lonchi.morpion.model;
 
 import javafx.beans.property.*;
+import lawson.lonchi.morpion.view.TicTacToeSquare;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.binding.*;
 
+/**
+ * Modèle du jeu de Morpion (Tic-Tac-Toe).
+ * Ce modèle gère la logique du jeu, y compris le plateau de jeu, les tours des joueurs,
+ * la détection des gagnants, et les scores.
+ */
 public class TicTacToeModel {
+    /** Largeur du plateau de jeu. */
     private final static int BOARD_WIDTH = 3;
+
+    /** Hauteur du plateau de jeu. */
     private final static int BOARD_HEIGHT = 3;
+
+    /** Nombre de cases alignées nécessaires pour gagner. */
     private final static int WINNING_COUNT = 3;
 
+    /** Score du joueur X. */
     private final IntegerProperty xScore = new SimpleIntegerProperty(0);
-private final IntegerProperty oScore = new SimpleIntegerProperty(0);
-private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
 
+    /** Score du joueur O. */
+    private final IntegerProperty oScore = new SimpleIntegerProperty(0);
 
+    /** Nombre de cases libres sur le plateau. */
+    private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
 
+    /** Tour actuel (FIRST pour X, SECOND pour O). */
     private final ObjectProperty<Owner> turn = new SimpleObjectProperty<>(Owner.FIRST);
+
+    /** Gagnant du jeu (NONE si pas de gagnant). */
     private final ObjectProperty<Owner> winner = new SimpleObjectProperty<>(Owner.NONE);
+
+    /** Plateau de jeu représenté par une matrice de propriétés. */
+    @SuppressWarnings("unchecked")
     private final ObjectProperty<Owner>[][] board = new SimpleObjectProperty[BOARD_WIDTH][BOARD_HEIGHT];
+
+    /** Cases gagnantes représentées par une matrice de propriétés booléennes. */
     private final BooleanProperty[][] winningBoard = new BooleanProperty[BOARD_WIDTH][BOARD_HEIGHT];
 
+
+
+    /**
+     * Constructeur privé pour initialiser le plateau de jeu et les cases gagnantes.
+     * Le modèle est un singleton, donc le constructeur est privé.
+     */
     private TicTacToeModel() {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
@@ -28,28 +60,27 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
         }
     }
 
+    /**
+     * Retourne l'instance unique du modèle (singleton).
+     *
+     * @return L'instance unique du modèle.
+     */
     public static TicTacToeModel getInstance() {
         return TicTacToeModelHolder.INSTANCE;
     }
 
+    /**
+     * Classe interne pour gérer l'instance unique du modèle (singleton).
+     */
     private static class TicTacToeModelHolder {
         private static final TicTacToeModel INSTANCE = new TicTacToeModel();
     }
 
-    // public void restart() {
-    //     for (int i = 0; i < BOARD_WIDTH; i++) {
-    //         for (int j = 0; j < BOARD_HEIGHT; j++) {
-    //             board[i][j].set(Owner.NONE);
-    //             winningBoard[i][j].set(false);
-    //         }
-    //     }
-    //     turn.set(Owner.FIRST);
-    //     winner.set(Owner.NONE);
-    //     System.out.println("Modèle réinitialisé.");
-    // }
-    
-    public void restart(){
-            for (int i = 0; i < BOARD_WIDTH; i++) {
+    /**
+     * Réinitialise le jeu en remettant à zéro le plateau, les scores et les propriétés.
+     */
+    public void restart() {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 board[i][j].set(Owner.NONE);
                 winningBoard[i][j].set(false);
@@ -61,35 +92,49 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
         xScore.set(0);
         oScore.set(0);
         freeSquares.set(9);
-
     }
 
+    /**
+     * Retourne la propriété du tour actuel.
+     *
+     * @return La propriété du tour actuel.
+     */
     public ObjectProperty<Owner> turnProperty() {
         return turn;
     }
 
+    public ObjectProperty<Owner> winnerProperty() {
+        return winner;
+    }
+
+    /**
+     * Retourne la propriété d'une case spécifique du plateau.
+     *
+     * @param row    La ligne de la case.
+     * @param column La colonne de la case.
+     * @return La propriété de la case spécifiée.
+     */
     public ObjectProperty<Owner> getSquare(int row, int column) {
         return board[row][column];
     }
 
+    /**
+     * Retourne la propriété d'une case gagnante.
+     *
+     * @param row    La ligne de la case.
+     * @param column La colonne de la case.
+     * @return La propriété de la case gagnante spécifiée.
+     */
     public BooleanProperty getWinningSquare(int row, int column) {
         return winningBoard[row][column];
     }
 
-    // public StringExpression getEndOfGameMessage() {
-    //     return Bindings.when(winner.isEqualTo(Owner.NONE))
-    //         .then("Match nul")
-    //         .otherwise(Bindings.concat(winner.get().toString(), " a gagné !"));
-    // }
-    // public StringExpression getEndOfGameMessage() {
-    //     return Bindings.when(winner.isEqualTo(Owner.NONE))
-    //         .then("") // Ne rien afficher si le jeu est en cours
-    //         .otherwise(Bindings.when(winner.isEqualTo(Owner.FIRST))
-    //             .then("Game over: Le gagnant est le premier joueur") // X gagne
-    //             .otherwise(Bindings.when(winner.isEqualTo(Owner.SECOND))
-    //                 .then("Game over: Le gagnant est le deuxième joueur") // O gagne
-    //                 .otherwise("Game over: Match nul"))); // Match nul
-    // }
+    /**
+     * Retourne le message de fin de jeu sous forme de StringExpression.
+     * Le message indique soit un match nul, soit le gagnant.
+     *
+     * @return Le message de fin de jeu.
+     */
     public StringExpression getEndOfGameMessage() {
         return Bindings.when(winner.isEqualTo(Owner.NONE).and(getFreeSquares().greaterThan(0)))
             .then("")
@@ -103,41 +148,43 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
                     ))
             );
     }
-    
-    
-    
-    
 
+    /**
+     * Définit le gagnant du jeu.
+     *
+     * @param winner Le gagnant du jeu (FIRST pour X, SECOND pour O, NONE pour match nul).
+     */
     public void setWinner(Owner winner) {
         this.winner.set(winner);
-        System.out.println("Gagnant défini : " + winner);
+        // System.out.println("Gagnant défini : " + winner);
     }
 
+    /**
+     * Vérifie si une case est valide (libre et jeu non terminé).
+     *
+     * @param row    La ligne de la case.
+     * @param column La colonne de la case.
+     * @return true si la case est valide, false sinon.
+     */
     public boolean validSquare(int row, int column) {
         return board[row][column].get() == Owner.NONE && winner.get() == Owner.NONE;
     }
 
+    /**
+     * Passe au joueur suivant.
+     */
     public void nextPlayer() {
         turn.set(turn.get().opposite());
-        System.out.println("Tour suivant : " + turn.get());
+        // System.out.println("Tour suivant : " + turn.get());
     }
-    
 
-    // public void play(int row, int column) {
-    //     if (validSquare(row, column)) {
-    //         board[row][column].set(turn.get());
-    //         System.out.println("Joueur " + turn.get() + " joue en (" + row + ", " + column + ")");
-
-    //         // Affiche les scores et les cases libres après chaque coup
-    //         System.out.println(getScore(Owner.FIRST).intValue() + " case pour X");
-    //         System.out.println(getScore(Owner.SECOND).intValue() + " case pour O");
-    //         System.out.println(getFreeSquares().intValue() + " cases libres");
-
-    //         checkForWinner(row, column);
-    //         nextPlayer();
-    //     }
-    // }
-
+    /**
+     * Joue dans une case spécifique si elle est valide.
+     * Met à jour les scores et vérifie s'il y a un gagnant.
+     *
+     * @param row    La ligne de la case.
+     * @param column La colonne de la case.
+     */
     public void play(int row, int column) {
         if (validSquare(row, column)) {
             board[row][column].set(turn.get());
@@ -154,48 +201,56 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
             nextPlayer();
         }
     }
-    
-    
 
+    /**
+     * Retourne un BooleanBinding qui vérifie si un mouvement est légal.
+     *
+     * @param row    La ligne de la case.
+     * @param column La colonne de la case.
+     * @return Un BooleanBinding qui vérifie si le mouvement est légal.
+     */
     public BooleanBinding legalMove(int row, int column) {
         return Bindings.createBooleanBinding(() -> validSquare(row, column), board[row][column], winner);
     }
 
-    // public NumberExpression getScore(Owner owner) {
-    //     int count = 0;
-    //     for (int i = 0; i < BOARD_WIDTH; i++) {
-    //         for (int j = 0; j < BOARD_HEIGHT; j++) {
-    //             if (board[i][j].get() == owner) {
-    //                 count++;
-    //             }
-    //         }
-    //     }
-    //     return new SimpleIntegerProperty(count);
-    // }
+    /**
+     * Retourne le score d'un joueur spécifique.
+     *
+     * @param owner Le joueur (FIRST pour X, SECOND pour O).
+     * @return La propriété du score du joueur spécifié.
+     */
     public IntegerProperty getScore(Owner owner) {
         return (owner == Owner.FIRST) ? xScore : oScore;
     }
 
-    // public NumberExpression getFreeSquares() {
-    //     int count = 0;
-    //     for (int i = 0; i < BOARD_WIDTH; i++) {
-    //         for (int j = 0; j < BOARD_HEIGHT; j++) {
-    //             if (board[i][j].get() == Owner.NONE) {
-    //                 count++;
-    //             }
-    //         }
-    //     }
-    //     return new SimpleIntegerProperty(count);
-    // }
-
+    /**
+     * Retourne le nombre de cases libres.
+     *
+     * @return La propriété du nombre de cases libres.
+     */
     public IntegerProperty getFreeSquares() {
         return freeSquares;
     }
 
+    /**
+     * Retourne un BooleanBinding qui vérifie si le jeu est terminé.
+     *
+     * @return Un BooleanBinding qui vérifie si le jeu est terminé.
+     */
+    // public BooleanBinding gameOver() {
+    //     return winner.isNotEqualTo(Owner.NONE);
+    // }
     public BooleanBinding gameOver() {
-        return winner.isNotEqualTo(Owner.NONE);
+        return winner.isNotEqualTo(Owner.NONE).or(getFreeSquares().isEqualTo(0));
     }
+    
 
+    /**
+     * Vérifie s'il y a un gagnant après un coup.
+     *
+     * @param row    La ligne de la case jouée.
+     * @param column La colonne de la case jouée.
+     */
     private void checkForWinner(int row, int column) {
         Owner currentPlayer = board[row][column].get();
         if (checkLine(row, currentPlayer) || checkColumn(column, currentPlayer) || checkDiagonals(currentPlayer)) {
@@ -204,8 +259,15 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
             setWinner(Owner.NONE);
         }
     }
-
- 
+   
+  
+    /**
+     * Vérifie si une ligne est gagnante.
+     *
+     * @param row    La ligne à vérifier.
+     * @param player Le joueur à vérifier.
+     * @return true si la ligne est gagnante, false sinon.
+     */
     private boolean checkLine(int row, Owner player) {
         for (int col = 0; col < BOARD_WIDTH; col++) {
             if (board[row][col].get() != player) {
@@ -215,8 +277,13 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
         return true;
     }
 
-    
-
+    /**
+     * Vérifie si une colonne est gagnante.
+     *
+     * @param column La colonne à vérifier.
+     * @param player Le joueur à vérifier.
+     * @return true si la colonne est gagnante, false sinon.
+     */
     private boolean checkColumn(int column, Owner player) {
         for (int row = 0; row < BOARD_HEIGHT; row++) {
             if (board[row][column].get() != player) {
@@ -226,7 +293,12 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
         return true;
     }
 
-
+    /**
+     * Vérifie si une diagonale est gagnante.
+     *
+     * @param player Le joueur à vérifier.
+     * @return true si une diagonale est gagnante, false sinon.
+     */
     private boolean checkDiagonals(Owner player) {
         boolean diagonal1 = true, diagonal2 = true;
         for (int i = 0; i < BOARD_WIDTH; i++) {
@@ -239,9 +311,13 @@ private final IntegerProperty freeSquares = new SimpleIntegerProperty(9);
         }
         return diagonal1 || diagonal2;
     }
-
-
     
+    
+    /**
+     * Vérifie si le plateau est plein (match nul).
+     *
+     * @return true si le plateau est plein, false sinon.
+     */
     private boolean isBoardFull() {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
