@@ -77,7 +77,7 @@ public class TicTacToeController {
         // Initialisation de la grille avec TicTacToeSquare
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                TicTacToeSquare square = new TicTacToeSquare(i, j);
+                TicTacToeSquare square = new TicTacToeSquare(i, j,this);
                 square.getStyleClass().add("tic-tac-toe-button"); // Appliquer le style CSS
                 gridPane.add(square, j, i);
                
@@ -88,27 +88,28 @@ public class TicTacToeController {
         VBox.setMargin(restartButton, new Insets(20, 0, 0, 0));
 
     }
+/**
+ * Gère l'action du bouton "Restart".
+ * Réinitialise le modèle et met à jour la vue.
+ */
+@FXML
+private void handleRestart() {
+    freeSquaresLabel.setVisible(true);
+    model.restart(); // Réinitialise le modèle
 
-    /**
-     * Gère l'action du bouton "Restart".
-     * Réinitialise le modèle et met à jour la vue.
-     */
-    @FXML
-    private void handleRestart() {
-        model.restart(); // Réinitialise le modèle
-
-        // Réinitialise les cases à blanc
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                TicTacToeSquare square = (TicTacToeSquare) gridPane.getChildren().get(i * 3 + j);
-                square.setStyle("-fx-background-color: white; " +
-                                 "-fx-font-size: 36px; " +
-                                 "-fx-font-weight: bold; " +
-                                 "-fx-text-fill: black; " +
-                                 "-fx-alignment: center;");
-            }
+    // Réinitialiser les cases à blanc
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            TicTacToeSquare square = (TicTacToeSquare) gridPane.getChildren().get(i * 3 + j);
+            square.setStyle("-fx-background-color: white; " +
+                           "-fx-font-size: 25px; " +
+                        //    "-fx-font-weight: bold; " +
+                           "-fx-text-fill: black; " +
+                           "-fx-alignment: center;");
         }
     }
+}
+
   
 
     /**
@@ -117,30 +118,72 @@ public class TicTacToeController {
      * @param row    La ligne de la case cliquée.
      * @param column La colonne de la case cliquée.
      */
+    int i =0;
     public void handleButtonClick(int row, int column) {
         model.play(row, column);
         updateView();
+        
     }
 
     /**
      * Met à jour la vue en fonction de l'état actuel du modèle.
      */
-    private void updateView() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                Button button = (Button) gridPane.getChildren().get(i * 3 + j);
-                Owner owner = model.getSquare(i, j).get();
-                button.setText(owner.toString());
-                button.setDisable(!model.validSquare(i, j));
+    // private void updateView() {
+    //     for (int i = 0; i < 3; i++) {
+    //         for (int j = 0; j < 3; j++) {
+    //             Button button = (Button) gridPane.getChildren().get(i * 3 + j);
+    //             Owner owner = model.getSquare(i, j).get();
+    //             button.setText(owner.toString());
+    //             button.setDisable(!model.validSquare(i, j));
 
-                // Mettre à jour la couleur de fond après un clic
-                if (owner != Owner.NONE) {
-                    button.setStyle("-fx-background-color: red;");
-                } else {
-                    button.setStyle("-fx-background-color: cyan;");
-                }
+    //             // Mettre à jour la couleur de fond après un clic
+    //             if (owner != Owner.NONE) {
+    //                 button.setStyle("-fx-background-color: red;");
+    //             } else {
+    //                 button.setStyle("-fx-background-color: cyan;");
+    //             }
+    //         }
+    //     }
+    // }
+
+    /**
+ * Met à jour la vue en fonction de l'état actuel du modèle.
+ */
+/**
+ * Met à jour la vue en fonction de l'état actuel du modèle.
+ */
+/**
+ * Met à jour la vue en fonction de l'état actuel du modèle.
+ */
+/**
+ * Met à jour la vue en fonction de l'état actuel du modèle.
+ */
+public void updateView() {
+    freeSquaresLabel.setVisible(!model.gameOver().get());
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            TicTacToeSquare square = (TicTacToeSquare) gridPane.getChildren().get(i * 3 + j);
+            
+            Owner owner = model.getSquare(i, j).get();
+            if (model.getWinningSquare(i, j).get()) {
+                // System.out.println(i+" "+j);
+                square.setStyle("-fx-background-color: orange; " +
+                               "-fx-font-size: 36px; " +
+                               "-fx-font-weight: bold; " +
+                               "-fx-text-fill: black; " +
+                               "-fx-alignment: center;");
+                               
+            } 
+            else if(model.gameOver().get() && !model.getWinningSquare(i, j).get()){
+                square.setStyle("-fx-background-color: white; " );                             
+            } 
+            
+            else if (owner != Owner.NONE) {
+                square.setStyle("-fx-background-color: red;");
+            } else {
+                // square.setStyle("-fx-background-color: cyan;");
             }
         }
     }
-
+}
 }

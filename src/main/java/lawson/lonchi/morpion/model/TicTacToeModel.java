@@ -1,6 +1,7 @@
 package lawson.lonchi.morpion.model;
 
 import javafx.beans.property.*;
+import lawson.lonchi.morpion.controller.TicTacToeController;
 import lawson.lonchi.morpion.view.TicTacToeSquare;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class TicTacToeModel {
 
     /** Cases gagnantes représentées par une matrice de propriétés booléennes. */
     private final BooleanProperty[][] winningBoard = new BooleanProperty[BOARD_WIDTH][BOARD_HEIGHT];
+
+    TicTacToeController controller;
 
 
 
@@ -198,7 +201,9 @@ public class TicTacToeModel {
             freeSquares.set(freeSquares.get() - 1);
     
             checkForWinner(row, column);
+            
             nextPlayer();
+
         }
     }
 
@@ -251,14 +256,128 @@ public class TicTacToeModel {
      * @param row    La ligne de la case jouée.
      * @param column La colonne de la case jouée.
      */
-    private void checkForWinner(int row, int column) {
-        Owner currentPlayer = board[row][column].get();
-        if (checkLine(row, currentPlayer) || checkColumn(column, currentPlayer) || checkDiagonals(currentPlayer)) {
-            setWinner(currentPlayer);
-        } else if (isBoardFull()) {
-            setWinner(Owner.NONE);
+    // private void checkForWinner(int row, int column) {
+    //     Owner currentPlayer = board[row][column].get();
+    //     if (checkLine(row, currentPlayer) || checkColumn(column, currentPlayer) || checkDiagonals(currentPlayer)) {
+    //         setWinner(currentPlayer);
+    //     } else if (isBoardFull()) {
+    //         setWinner(Owner.NONE);
+    //     }
+    // }
+    /**
+
+ */
+private void checkForWinner(int row, int column) {
+    Owner currentPlayer = board[row][column].get();
+    List<int[]> winningSquares = getWinningSquares(currentPlayer);
+    if (winningSquares != null) {
+        markWinningSquares(winningSquares); // Marquer les cases gagnantes
+        setWinner(currentPlayer); // Définir le gagnant
+    } else if (isBoardFull()) {
+        setWinner(Owner.NONE); // Match nul
+    }
+}
+
+/**
+ * Retourne les cases gagnantes pour un joueur donné.
+ *
+ * @param player Le joueur à vérifier.
+ * @return Une liste des cases gagnantes, ou null si aucun gagnant.
+ */
+private List<int[]> getWinningSquares(Owner player) {
+    List<int[]> winningSquares = checkLineForWinner(player);
+    if (winningSquares != null) return winningSquares;
+
+    winningSquares = checkColumnForWinner(player);
+    if (winningSquares != null) return winningSquares;
+
+    winningSquares = checkDiagonalsForWinner(player);
+    return winningSquares;
+}
+
+/**
+ * Vérifie si une ligne est gagnante et retourne les cases gagnantes.
+ *
+ * @param player Le joueur à vérifier.
+ * @return Une liste des cases gagnantes, ou null si aucune ligne gagnante.
+ */
+private List<int[]> checkLineForWinner(Owner player) {
+    for (int row = 0; row < BOARD_HEIGHT; row++) {
+        List<int[]> squares = new ArrayList<>();
+        for (int col = 0; col < BOARD_WIDTH; col++) {
+            if (board[row][col].get() == player) {
+                squares.add(new int[]{row, col});
+            } else {
+                squares.clear();
+                break;
+            }
+        }
+        if (squares.size() == WINNING_COUNT) {
+            return squares;
         }
     }
+    return null;
+}
+
+/**
+ * Vérifie si une colonne est gagnante et retourne les cases gagnantes.
+ *
+ * @param player Le joueur à vérifier.
+ * @return Une liste des cases gagnantes, ou null si aucune colonne gagnante.
+ */
+private List<int[]> checkColumnForWinner(Owner player) {
+    for (int col = 0; col < BOARD_WIDTH; col++) {
+        List<int[]> squares = new ArrayList<>();
+        for (int row = 0; row < BOARD_HEIGHT; row++) {
+            if (board[row][col].get() == player) {
+                squares.add(new int[]{row, col});
+            } else {
+                squares.clear();
+                break;
+            }
+        }
+        if (squares.size() == WINNING_COUNT) {
+            return squares;
+        }
+    }
+    return null;
+}
+
+/**
+ * Vérifie si une diagonale est gagnante et retourne les cases gagnantes.
+ *
+ * @param player Le joueur à vérifier.
+ * @return Une liste des cases gagnantes, ou null si aucune diagonale gagnante.
+ */
+private List<int[]> checkDiagonalsForWinner(Owner player) {
+    List<int[]> squares = new ArrayList<>();
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        if (board[i][i].get() == player) {
+            squares.add(new int[]{i, i});
+        } else {
+            squares.clear();
+            break;
+        }
+    }
+    if (squares.size() == WINNING_COUNT) {
+        return squares;
+    }
+
+    squares.clear();
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        if (board[i][BOARD_WIDTH - 1 - i].get() == player) {
+            squares.add(new int[]{i, BOARD_WIDTH - 1 - i});
+        } else {
+            squares.clear();
+            break;
+        }
+    }
+    if (squares.size() == WINNING_COUNT) {
+        return squares;
+    }
+
+    return null;
+}
    
   
     /**
@@ -328,4 +447,18 @@ public class TicTacToeModel {
         }
         return true;
     }
+
+    //oklm//
+    /**
+ * Marque les cases gagnantes sur le plateau.
+ *
+ * @param winningSquares Les cases gagnantes à marquer.
+ */
+public void markWinningSquares(List<int[]> winningSquares) {
+    for (int[] square : winningSquares) {
+        int row = square[0];
+        int col = square[1];
+        winningBoard[row][col].set(true);
+    }
+}
 }

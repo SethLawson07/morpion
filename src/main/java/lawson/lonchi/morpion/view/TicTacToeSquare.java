@@ -31,7 +31,7 @@ public class TicTacToeSquare extends TextField {
      * @param row    La ligne de la case.
      * @param column La colonne de la case.
      */
-    public TicTacToeSquare(final int row, final int column) {
+    public TicTacToeSquare(final int row, final int column,TicTacToeController controller) {
        
         
         // La case n'est pas éditable
@@ -41,8 +41,8 @@ public class TicTacToeSquare extends TextField {
 
         // Style pour centrer le texte, le mettre en noir, en gras, et augmenter la taille
         setStyle("-fx-background-color: white; " +
-                 "-fx-font-size: 36px; " +
-                 "-fx-font-weight: bold; " +
+                 "-fx-font-size: 25px; " +
+                //  "-fx-font-weight: bold; " +
                  "-fx-text-fill: black; " +
                  "-fx-alignment: center;");
 
@@ -54,13 +54,13 @@ public class TicTacToeSquare extends TextField {
 
         // Désactiver la case si elle est déjà occupée ou si le jeu est terminé
         disableProperty().bind(model.gameOver().or(model.getSquare(row, column).isNotEqualTo(Owner.NONE)));
-
+        
         // Gestion de la souris : changement de couleur au survol
         setOnMouseEntered(event -> {
             if (model.validSquare(row, column)) {
                 setStyle("-fx-background-color: green; " +
-                          "-fx-font-size: 36px; " +
-                          "-fx-font-weight: bold; " +
+                          "-fx-font-size: 25px; " +
+                        //   "-fx-font-weight: bold; " +
                           "-fx-text-fill: black; " +
                           "-fx-alignment: center;");
             }
@@ -70,28 +70,30 @@ public class TicTacToeSquare extends TextField {
         setOnMouseExited(event -> {
             if (ownerProperty.get() == Owner.NONE) {
                 setStyle("-fx-background-color: white; " +
-                          "-fx-font-size: 36px; " +
-                          "-fx-font-weight: bold; " +
+                          "-fx-font-size: 25px; " +
+                        //   "-fx-font-weight: bold; " +
                           "-fx-text-fill: black; " +
                           "-fx-alignment: center;");
             } else {
-                setStyle("-fx-background-color: red; " +
-                          "-fx-font-size: 36px; " +
-                          "-fx-font-weight: bold; " +
-                          "-fx-text-fill: black; " +
-                          "-fx-alignment: center;");
-            }
+            //     setStyle("-fx-background-color: red; " +
+            //               "-fx-font-size: 25px; " +
+            //             //   "-fx-font-weight: bold; " +
+            //               "-fx-text-fill: black; " +
+            //               "-fx-alignment: center;");
+            //
+             }
         });
 
         // Gestion du clic : jouer dans la case et mettre à jour la couleur
         setOnMouseClicked(event -> {
-            model.play(row, column);
-            setStyle("-fx-background-color: red; " +
-                      "-fx-font-size: 36px; " +
-                      "-fx-font-weight: bold; " +
-                      "-fx-text-fill: black; " +
-                      "-fx-alignment: center;");
-        });
+            controller.handleButtonClick(row, column);
+        //     model.play(row, column);
+        //     setStyle("-fx-background-color: red; " +
+        //               "-fx-font-size: 25px; " +
+        //               "-fx-font-weight: bold; " +
+        //               "-fx-text-fill: black; " +
+        //               "-fx-alignment: center;");
+         });
 
     }
    

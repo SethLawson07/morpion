@@ -34,8 +34,9 @@
 
 /* Style pour les cases */
 .tictactoe-square {
-    -fx-font-size: 36px; /* Taille de police augmentée */
-    -fx-font-weight: bold; /* Texte en gras */
+    -fx-font-size: 25px; /* Taille de police augmentée */
+    -fx-font-weight: bold; 
+    /* Texte en gras */
     -fx-text-fill: black; /* Couleur du texte en noir */
     -fx-alignment: center; /* Centrer le texte */
 }
@@ -47,7 +48,8 @@
 
 /* Style pour les cases désactivées (après un clic) */
 .tictactoe-square:disabled {
-    -fx-background-color: red; /* Fond rouge après un clic */
+    -fx-background-color: cyan;
+     /* Fond rouge après un clic */
 
 }
 
@@ -62,7 +64,7 @@
         -fx-border-color: black;  /* Bordure noire */
         -fx-border-width: 0.5px;    /* Épaisseur de la bordure */
         -fx-background-color: white; /* Fond blanc */
-        -fx-font-size: 36px;      /* Texte plus grand */
+        -fx-font-size: 25px;      /* Texte plus grand */
         -fx-font-weight: bold; 
         -fx-text-fill: black;
         -fx-alignment: center;
