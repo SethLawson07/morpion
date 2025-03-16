@@ -1,13 +1,13 @@
 .button {
     -fx-padding: 10px;
-    -fx-font-size: 16px; /* Réduit la taille du texte */
+    -fx-font-size: 16px; 
     -fx-background-color: #2980b9;
-    -fx-text-fill: white; /* Texte en blanc */
-    -fx-border-radius: 0; /* Supprime l'arrondi pour un bouton rectangulaire */
-    -fx-background-radius: 0; /* Même chose pour l'arrière-plan */
-    -fx-min-width: 120px; /* Ajuste la largeur du bouton */
-    -fx-min-height: 40px; /* Ajuste la hauteur du bouton */
-    -fx-margin: 20px 0 0 0; /* ⚠️ En JavaFX, "margin" doit être défini en Java */
+    -fx-text-fill: white;
+    -fx-border-radius: 0; 
+    -fx-background-radius: 0; 
+    -fx-min-width: 120px; 
+    -fx-min-height: 40px; 
+    -fx-margin: 20px 0 0 0; 
 }
 
 
@@ -32,44 +32,35 @@
     -fx-font-weight: bold;
 }
 
-/* Style pour les cases */
 .tictactoe-square {
-    -fx-font-size: 25px; /* Taille de police augmentée */
-    /* -fx-font-weight: bold;  */
-    /* Texte en gras */
-    -fx-text-fill: black; /* Couleur du texte en noir */
-    -fx-alignment: center; /* Centrer le texte */
+    -fx-font-size: 25px; 
+    -fx-text-fill: black; 
+    -fx-alignment: center; 
 }
 
-/* Style pour les cases au survol */
 .tictactoe-square:hover {
-    -fx-background-color: green; /* Fond vert au survol */
+    -fx-background-color: green; 
 }
 
-/* Style pour les cases désactivées (après un clic) */
 .tictactoe-square:disabled {
     -fx-background-color: cyan;
-     /* Fond rouge après un clic */
-
+    
 }
 
 
-    #gridPane {
-        -fx-padding: 0;
-    }
-    
-   
+#gridPane {
+    -fx-padding: 0;
+}
 
 .tic-tac-toe-button {
-        -fx-border-color: black;  /* Bordure noire */
-        -fx-border-width: 0.5px;    /* Épaisseur de la bordure */
-        -fx-background-color: white; /* Fond blanc */
-        -fx-font-size: 25px;      /* Texte plus grand */
-        /* -fx-font-weight: bold;  */
-        -fx-text-fill: black;
-        -fx-alignment: center;
-        -fx-min-width: 100px; /* Ajuste selon la taille souhaitée */
-        -fx-min-height: 100px;
+    -fx-border-color: black; 
+    -fx-border-width: 0.5px;    
+    -fx-background-color: white; 
+    -fx-font-size: 25px;      
+    -fx-text-fill: black;
+    -fx-alignment: center;
+    -fx-min-width: 100px; 
+    -fx-min-height: 100px;
 }
 
 #xScoreLabel {
@@ -86,7 +77,6 @@
     -fx-border-radius: 5px;
 }
 
-/* Style pour les labels de score après la fin du jeu */
 #xScoreLabel.gameOver {
     -fx-background-color: red;
     -fx-text-fill: white;
@@ -96,4 +86,3 @@
     -fx-background-color: red;
     -fx-text-fill: white;
 }
-   
